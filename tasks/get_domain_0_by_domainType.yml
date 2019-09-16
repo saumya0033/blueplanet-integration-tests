@@ -1,0 +1,17 @@
+- name: 'get domain'
+  uri:
+    url: '{{mdso.BP_SERVER}}/bpocore/market/api/v1/domains?q=domainType:urn:ciena:bp:domain:{{domainType}}'
+    method: GET
+    status_code:
+      - 200
+  register: domain
+- name: Set the domainID Fact
+  set_fact:
+    cacheable: true
+    domainId: "{{ domain.json['items'][0]['id'] }}"
+  when: (domain.json['items'] | length) > 0
+- name: Set the domain Fact
+  set_fact:
+    cacheable: true
+    domain: "{{ domain.json['items'][0] }}"
+  when: (domain.json['items'] | length) > 0

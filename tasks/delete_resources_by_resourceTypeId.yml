@@ -1,0 +1,36 @@
+- name: Clear the resources Fact
+  set_fact:
+    cacheable: true
+    resources: []
+- import_tasks: get_created_resources_by_resourceTypeId.yml
+- name: Delete resource
+  uri:
+    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources/{{ item.id }}'
+    method: DELETE
+    status_code:
+      - 204
+    validate_certs: no
+    # headers:
+    #   Cookie: "{{ fact_mdso_cookie }}"
+    #   Authorization: "Bearer {{ fact_mdso_token }}"
+  with_items: "{{ resources }}"
+- name: Verify delete resources
+  uri:
+    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources/{{ item.id }}'
+    method: GET
+    status_code:
+      - 200
+      - 404
+    validate_certs: no
+    # headers:
+    #   Cookie: "{{ fact_mdso_cookie }}"
+    #   Authorization: "Bearer {{ fact_mdso_token }}"
+  with_items: "{{ resources }}"
+  until: result.failed is defined
+  retries: 120
+  delay: 1
+  register: result
+- name: Delete resources
+  debug:
+    msg: "resources: {{ result }}"
+    verbosity: 3

@@ -1,0 +1,27 @@
+- name: Get Resource Providers
+  block:
+  - name: 'get resource-providers'
+    uri:
+      url: '{{mdso.BP_SERVER}}/bpocore/market/api/v1/resource-providers?q=domainType:urn:ciena:bp:domain:{{domainType}}'
+      method: GET
+    register: result
+    failed_when: (result.json['items'] | length) == 0
+  rescue:
+    - fail:
+        msg: Domain creation failed.  The RA is probably not onboarded.
+- name: Set the RP Fact
+  set_fact:
+    cacheable: true
+    rpId: "{{ result.json['items'][0]['id'] }}"
+- name: Set the RP Fact
+  set_fact:
+    cacheable: true
+    resourceProvider: "{{ result.json['items'][0] }}"
+- name: print resourceProvider
+  debug:
+    msg: "resourceProvider: {{ resourceProvider }}"
+    verbosity: 3
+- name: print rpId
+  debug:
+    msg: "rpId: {{ rpId }}"
+    verbosity: 3

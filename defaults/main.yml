@@ -1,2 +1,3 @@
 ---
 # defaults file for blueplanet-integration-tests
+BP_SERVER: http://localhost:8181

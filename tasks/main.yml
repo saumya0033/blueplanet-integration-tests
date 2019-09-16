@@ -1,2 +1,22 @@
 ---
 # tasks file for blueplanet-integration-tests
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - import_tasks: await_active_by_resourceTypeId.yml
+  - import_tasks: await_active.yml
+  - import_tasks: await_domain_onboard.yml
+  - import_tasks: create_domain.yml
+  - import_tasks: create_resource.yml
+  - import_tasks: delete_domain.yml
+  - import_tasks: delete_domains_by_domainType.yml
+  - import_tasks: delete_resources_by_resourceTypeId.yml
+  - import_tasks: get_created_resources_by_resourceTypeId.yml
+  - import_tasks: get_domain_0_by_domainType.yml
+  - import_tasks: get_domains_by_domainType.yml
+  - import_tasks: get_products_by_domainId.yml
+  - import_tasks: get_products.yml
+  - import_tasks: get_resource_one_by_filters.yml
+  - import_tasks: get_resourceProvider_by_domainType.yml
+  - import_tasks: get_resources_by_resourceTypeId.yml
+  - import_tasks: patch_resource.yml

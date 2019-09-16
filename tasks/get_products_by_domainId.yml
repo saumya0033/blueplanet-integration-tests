@@ -1,0 +1,21 @@
+- name: 'get products'
+  uri:
+    url: '{{mdso.BP_SERVER}}/bpocore/market/api/v1/domains/{{domainId}}/products?includeInactive=true'
+    method: GET
+  register: result
+- name: Set the products Fact
+  set_fact:
+    cacheable: true
+    products: "{{ result.json['items'] }}"
+- name: print products
+  debug:
+    msg: "products: {{ products }}"
+    verbosity: 3
+- name: Set individual facts
+  set_fact:
+    cacheable: true
+    keyed_products: "{{ products | items2dict(key_name='resourceTypeId', value_name='id') }}"
+- name: print keyed_products
+  debug:
+    msg: "keyed_products: {{ keyed_products }}"
+    verbosity: 3

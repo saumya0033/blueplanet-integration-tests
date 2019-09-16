@@ -1,0 +1,13 @@
+- name: 'get resources'
+  uri:
+    url: '{{mdso.BP_SERVER}}/bpocore/market/api/v1/resources?resourceTypeId={{ resourceTypeId }}&q=discovered:false'
+    method: GET
+  register: result
+- name: Set the resources Fact
+  set_fact:
+    cacheable: true
+    resources: "{{ result.json['items'] }}"
+- name: print resources
+  debug:
+    msg: "resources: {{ resources }}"
+    verbosity: 3
