@@ -9,4 +9,4 @@
       Content-Type: application/json
     status_code: 201
   register: result
-- import_tasks: common/await_active.yml
+- import_tasks: await_active.yml

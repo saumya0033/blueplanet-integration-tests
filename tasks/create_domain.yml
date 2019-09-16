@@ -15,8 +15,8 @@
 - name: Clear the domain Fact
   set_fact:
     domain: {}
-- import_tasks: common/get_resourceProvider_by_domainType.yml # this sets rpId and resourceProvider var
-- import_tasks: common/get_domains_by_domainType.yml # this sets domains var
+- import_tasks: get_resourceProvider_by_domainType.yml # this sets rpId and resourceProvider var
+- import_tasks: get_domains_by_domainType.yml # this sets domains var
 - name: print WARNING
   debug:
     msg: "WARNING: domain already exists.  Not creating new domain"
@@ -47,4 +47,4 @@
   set_fact:
     cacheable: true
     domainId: "{{ result.json['id'] }}"
-- import_tasks: common/await_domain_onboard.yml
+- import_tasks: await_domain_onboard.yml

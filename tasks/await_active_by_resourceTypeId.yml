@@ -1,4 +1,4 @@
-- import_tasks: common/get_resources_by_resourceTypeId.yml
+- import_tasks: get_resources_by_resourceTypeId.yml
 - name: 'await active resource'
   uri:
     url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources/{{ item.id }}'
