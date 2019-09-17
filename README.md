@@ -23,18 +23,6 @@ N/A
 Example Playbook
 ----------------
 
-Default fact storage:
-
-| Market entity |             task                |                                       input                                        |  output fact (returns this global var)   |
-| :-----------: | :-----------------------------: | :--------------------------------------------------------------------------------: | :--------------------------------------: |
-|   resource    |         create_resource         |                     resourceTypeId <br> label <br> properties                      |           resourceId_`<label>`           |
-|   resource    |   get_resource_one_by_filters   |                                                                                    | resource (Dict) <br> resourceId (String) |
-|   resource    | get_resources_by_resourceTypeId |                                   resourceTypeId                                   | resources (Dict) <br> resourceId (String) |
-|    domain     |          create_domain          | title <br> description <br> accessUrl <br> domainType <br> properties <br> address |            domainId_`<title>`            |
-|    domain     |          delete_domain          |                                      domainId                                      |                                          |
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
 ```yaml
 ###### main.yml #######
 ###### main.yml #######
@@ -132,3 +120,16 @@ Author Information
 ------------------
 
 Jeff Groom (jgroom@ciena.com)
+
+Table render broken
+-------------------
+
+Default fact storage:
+
+| Market entity |             task                |                                       input                                        |  output fact (returns this global var)   |
+| :-----------: | :-----------------------------: | :--------------------------------------------------------------------------------: | :--------------------------------------: |
+|   resource    |         create_resource         |                     resourceTypeId <br> label <br> properties                      |           resourceId_`<label>`           |
+|   resource    |   get_resource_one_by_filters   |                                                                                    | resource (Dict) <br> resourceId (String) |
+|   resource    | get_resources_by_resourceTypeId |                                   resourceTypeId                                   | resources (Dict) <br> resourceId (String) |
+|    domain     |          create_domain          | title <br> description <br> accessUrl <br> domainType <br> properties <br> address |            domainId_`<title>`            |
+|    domain     |          delete_domain          |                                      domainId                                      |                                          |
