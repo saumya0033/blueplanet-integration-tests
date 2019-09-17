@@ -1,7 +1,7 @@
-Role Name
+Blue Planet Integration Tests
 =========
 
-Write integration and automation tests to Ciena's Blue Planet orchestration platform
+Write integration and automation tests for Ciena's Blue Planet orchestration platform
 
 Requirements
 ------------
@@ -109,6 +109,42 @@ Example Playbook
 - import_tasks: jgroom33.blueplanet_integration_tests/tasks/delete_domains_by_domainType.yml
   vars:
     - domainType: bpraciscoiosxr
+```
+
+```yaml
+###### inventory.yml #######
+###### inventory.yml #######
+###### inventory.yml #######
+cisco:
+  hosts:
+    host1:
+      ansible_host: cisco-0.cisco-asr.ciena.cloud.tesuto.com
+      label: Cisco_XR_0
+      username: tesutocli
+      password: bar
+      netconfHostPort: 830
+```
+
+The above would be executed as follows:
+
+```bash
+ansible-galaxy install --roles-path . jgroom33.blueplanet_integration_tests
+export ANSIBLE_JINJA2_NATIVE=true
+export ANSIBLE_CACHE_PLUGIN=jsonfile
+export ANSIBLE_CACHE_PLUGIN_CONNECTION=.
+
+ansible-playbook main.yml -i inventory.yml -t create_domain
+ansible-playbook main.yml -i inventory.yml -t create_sessionProfile
+
+ansible-playbook main.yml -i inventory.yml -t delete_sessionProfile
+ansible-playbook main.yml -i inventory.yml -t delete_domain
+```
+
+or use the create/delete tags
+
+```bash
+ansible-playbook main.yml -i inventory.yml -t create
+ansible-playbook main.yml -i inventory.yml -t delete
 ```
 
 License
