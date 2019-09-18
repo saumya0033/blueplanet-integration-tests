@@ -3,6 +3,17 @@ Blue Planet Integration Tests
 
 Write integration and automation tests for Ciena's Blue Planet orchestration platform
 
+Recommended Installation
+------------
+
+```bash
+ansible-galaxy install --roles-path . jgroom33.blueplanet_integration_tests
+export ANSIBLE_JINJA2_NATIVE=true
+export ANSIBLE_CACHE_PLUGIN=jsonfile
+export ANSIBLE_CACHE_PLUGIN_CONNECTION=.
+export ANSIBLE_INVENTORY=inventory.yml
+```
+
 Requirements
 ------------
 
@@ -11,9 +22,9 @@ Blue Planet
 Role Variables
 --------------
 
-BP_SERVER
-BP_USERNAME
-BP_PASSWORD
+BP_SERVER (default http://localhost:8181)
+BP_USERNAME (default admin)
+BP_PASSWORD (default adminpw)
 
 Dependencies
 ------------

@@ -1,0 +1,19 @@
+- name: check ANSIBLE_JINJA2_NATIVE
+  fail:
+    msg: env var ANSIBLE_JINJA2_NATIVE not set to true
+  when: lookup('env','ANSIBLE_JINJA2_NATIVE') != 'true'
+- name: check ANSIBLE_CACHE_PLUGIN
+  fail:
+    msg: env var ANSIBLE_CACHE_PLUGIN not set to jsonfile
+  when: lookup('env','ANSIBLE_CACHE_PLUGIN') != 'jsonfile'
+- name: check ANSIBLE_CACHE_PLUGIN_CONNECTION
+  fail:
+    msg: env var ANSIBLE_CACHE_PLUGIN_CONNECTION not set to .
+  when: lookup('env','ANSIBLE_CACHE_PLUGIN_CONNECTION') != '.'
+- name: check ANSIBLE_INVENTORY
+  fail:
+    msg: env var ANSIBLE_INVENTORY not set to inventory.yml
+  when: lookup('env','ANSIBLE_INVENTORY') != 'inventory.yml'
+- name: Instuctions
+  debug:
+    msg: 'All facts that are collected during execution are stored in a file called localhost. This should be added to .gitignore'
