@@ -9,6 +9,10 @@
 # Returns:
 #   domainId
 #   domain
+- name: validate title has no spaces
+  fail:
+    msg: "Domain title must not contain spaces"
+  when: title.find(" ") > 0
 - name: Clear the domainID Fact
   set_fact:
     domainId: ""
@@ -47,4 +51,8 @@
   set_fact:
     cacheable: true
     domainId: "{{ result.json['id'] }}"
+- name: set the specific domainId Fact
+  set_fact:
+    cacheable: true
+    domainId_{{ title }}: "{{ result.json['id'] }}"
 - import_tasks: await_domain_onboard.yml

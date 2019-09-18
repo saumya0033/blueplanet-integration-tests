@@ -1,0 +1,8 @@
+{% if q_params is defined %}&q=
+{%- for key, value in q_params.iteritems() -%}
+{{ key }}:{{ value | urlencode }}{%- if not loop.last %},{% endif %}
+{%- endfor -%}{% endif %}
+{% if p_params is defined %}&p=
+{%- for key, value in p_params.iteritems() -%}
+{{ key }}:{{ value | urlencode }}{%- if not loop.last %},{% endif %}
+{%- endfor -%}{% endif %}

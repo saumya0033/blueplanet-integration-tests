@@ -1,3 +1,7 @@
+- name: validate label has no spaces
+  fail:
+    msg: "Resource label must not contain spaces"
+  when: label.find(" ") > 0
 - import_tasks: get_products.yml # this sets products and keyed_products var
 - name: 'create resource'
   uri:
@@ -20,9 +24,8 @@
   set_fact:
     cacheable: true
     resource: "{{ result.json }}"
-# - name: set the specific resourceId Fact
-#   set_fact:
-#     cacheable: true
-#     keyed_resources:
-#     resourceId_"{{ label }}": "{{ result.json['id'] }}"
+- name: set the specific resourceId Fact
+  set_fact:
+    cacheable: true
+    resourceId_{{ label }}: "{{ result.json['id'] }}"
 - import_tasks: await_active.yml
