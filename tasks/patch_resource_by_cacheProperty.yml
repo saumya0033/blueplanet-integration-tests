@@ -1,16 +1,4 @@
 - name: 'get resource by cacheProperty'
-  import_tasks: get_resource_by_cacheProperty.yml
-  vars:
-    - cacheProperty: "{{ cacheProperty }}"
+  import_tasks: get_resourceId_by_cacheProperty.yml
 - name: 'patch resource'
-  uri:
-    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources/{{ resourceId }}'
-    method: PATCH
-    body:
-      properties: "{{ properties }}"
-    body_format: json
-    headers:
-      Content-Type: application/json
-    status_code: 201
-  register: result
-- import_tasks: await_active.yml
+  import_tasks: patch_resource.yml
