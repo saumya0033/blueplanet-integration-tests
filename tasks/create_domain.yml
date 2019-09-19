@@ -13,6 +13,10 @@
   fail:
     msg: "Domain title must not contain spaces"
   when: title.find(" ") > 0
+- name: validate title has no dashes
+  fail:
+    msg: "Domain title must not contain dashes"
+  when: title.find("-") > 0
 - name: Clear the domainID Fact
   set_fact:
     domainId: ""

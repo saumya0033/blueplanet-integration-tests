@@ -1,0 +1,4 @@
+- name: 'get resource by cacheProperty'
+  import_tasks: get_resourceId_by_cacheProperty.yml
+- name: 'delete resource'
+  import_tasks: delete_resource.yml

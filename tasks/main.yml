@@ -16,7 +16,7 @@
   - import_tasks: get_domains_by_domainType.yml
   - import_tasks: get_products_by_domainId.yml
   - import_tasks: get_products.yml
-  - import_tasks: get_resource_one_by_filters.yml
+  - import_tasks: get_resource_0_by_filters.yml
   - import_tasks: get_resourceProvider_by_domainType.yml
   - import_tasks: get_resources_by_resourceTypeId.yml
   - import_tasks: patch_resource.yml

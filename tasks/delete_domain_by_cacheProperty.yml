@@ -1,0 +1,4 @@
+- name: 'get domain by cacheProperty'
+  import_tasks: get_domainId_by_cacheProperty.yml
+- name: 'delete domain'
+  import_tasks: delete_domain.yml

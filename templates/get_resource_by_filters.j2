@@ -1,8 +1,11 @@
-{% if q_params is defined %}&q=
+?{% if resourceTypeId is defined %}resourceTypeId={{ resourceTypeId }}{% endif %}
+{% if resourceTypeId is defined and q_params is defined %}&{% endif %}
+{% if q_params is defined %}q=
 {%- for key, value in q_params.iteritems() -%}
 {{ key }}:{{ value | urlencode }}{%- if not loop.last %},{% endif %}
 {%- endfor -%}{% endif %}
-{% if p_params is defined %}&p=
+{% if resourceTypeId is defined or q_params is defined %}&{% endif %}
+{% if p_params is defined %}p=
 {%- for key, value in p_params.iteritems() -%}
 {{ key }}:{{ value | urlencode }}{%- if not loop.last %},{% endif %}
 {%- endfor -%}{% endif %}

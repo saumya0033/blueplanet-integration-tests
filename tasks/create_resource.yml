@@ -2,6 +2,10 @@
   fail:
     msg: "Resource label must not contain spaces"
   when: label.find(" ") > 0
+- name: validate title has no dashes
+  fail:
+    msg: "label must not contain dashes"
+  when: label.find("-") > 0
 - import_tasks: get_products.yml # this sets products and keyed_products var
 - name: 'create resource'
   uri:
