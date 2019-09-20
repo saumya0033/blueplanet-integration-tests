@@ -11,11 +11,11 @@
   register: result
 - name: Verify delete domain
   uri:
-    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources/{{ domainId }}'
+    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/domains/{{ domainId }}'
     method: GET
     status_code:
-      - 404
       - 200
+      - 404
     validate_certs: no
     # headers:
     #   Cookie: "{{ fact_mdso_cookie }}"
@@ -23,3 +23,4 @@
   until: result.failed is defined
   retries: 120
   delay: 5
+  register: result

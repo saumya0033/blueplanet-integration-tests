@@ -9,6 +9,7 @@
 # Returns:
 #   domainId
 #   domain
+- import_tasks: open_cache.yml # loads cache
 - name: validate title has no spaces
   fail:
     msg: "Domain title must not contain spaces"
@@ -55,8 +56,16 @@
   set_fact:
     cacheable: true
     domainId: "{{ result.json['id'] }}"
-- name: set the specific domainId Fact
+- name: set the unkeyed_domain Fact
   set_fact:
+    unkeyed_domain:
+    - key: "{{ title }}"
+      value: "{{ result.json['id'] }}"
+- name: set the keyed_domain Fact
+  set_fact:
+    keyed_domain: "{{ unkeyed_domain | items2dict(key_name='key', value_name='value') }}"
+- name: Update the keyed_domains Fact
+  set_fact:
+    keyed_domains: "{{ keyed_domains | combine(keyed_domain) }}"
     cacheable: true
-    domainId_{{ title }}: "{{ result.json['id'] }}"
 - import_tasks: await_domain_onboard.yml

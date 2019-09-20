@@ -1,18 +1,18 @@
+- import_tasks: open_cache.yml # loads cache
 - name: validate label has no spaces
   fail:
     msg: "Resource label must not contain spaces"
   when: label.find(" ") > 0
-- name: validate title has no dashes
+- name: validate label has no dashes
   fail:
     msg: "label must not contain dashes"
   when: label.find("-") > 0
-- import_tasks: get_products.yml # this sets products and keyed_products var
 - name: 'create resource'
   uri:
     url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources'
     method: POST
     body:
-      productId: "{{ keyed_products[resourceTypeId] }}"
+      productId: "{{ productId }}"
       label: "{{ label }}"
       properties: "{{ properties }}"
     body_format: json
@@ -28,8 +28,16 @@
   set_fact:
     cacheable: true
     resource: "{{ result.json }}"
-- name: set the specific resourceId Fact
+- name: set the unkeyed_resource Fact
   set_fact:
+    unkeyed_resource:
+    - key: "{{ label }}"
+      value: "{{ result.json['id'] }}"
+- name: set the keyed_resource Fact
+  set_fact:
+    keyed_resource: "{{ unkeyed_resource | items2dict(key_name='key', value_name='value') }}"
+- name: Update the keyed_resources Fact
+  set_fact:
+    keyed_resources: "{{ keyed_resources | combine(keyed_resource) }}"
     cacheable: true
-    resourceId_{{ label }}: "{{ result.json['id'] }}"
 - import_tasks: await_active.yml
