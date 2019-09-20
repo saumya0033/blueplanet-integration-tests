@@ -23,7 +23,9 @@ Role Variables
 --------------
 
 BP_SERVER (default http://localhost:8181)
+
 BP_USERNAME (default admin)
+
 BP_PASSWORD (default adminpw)
 
 Dependencies
