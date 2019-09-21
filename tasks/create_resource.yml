@@ -20,14 +20,6 @@
       Content-Type: application/json
     status_code: 201
   register: result
-- name: set the resourceId Fact
-  set_fact:
-    cacheable: true
-    resourceId: "{{ result.json['id'] }}"
-- name: set the resource Fact
-  set_fact:
-    cacheable: true
-    resource: "{{ result.json }}"
 - name: set the unkeyed_resource Fact
   set_fact:
     unkeyed_resource:
@@ -41,3 +33,5 @@
     keyed_resources: "{{ keyed_resources | combine(keyed_resource) }}"
     cacheable: true
 - import_tasks: await_active.yml
+  vars:
+    resourceId: "{{ result.json['id'] }}"

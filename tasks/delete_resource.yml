@@ -1,4 +1,4 @@
-- name: Delete resource
+- name: Deleting resource {{ resourceId }}
   uri:
     url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources/{{ resourceId }}'
     method: DELETE
@@ -9,7 +9,11 @@
     # headers:
     #   Cookie: "{{ fact_mdso_cookie }}"
     #   Authorization: "Bearer {{ fact_mdso_token }}"
-- name: Verify delete resources
+  until: ('status' in result) and (result.status == 204)
+  retries: 120
+  delay: 1
+  register: result
+- name: Verify delete resource {{ resourceId }}
   uri:
     url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources/{{ resourceId }}'
     method: GET
@@ -20,7 +24,7 @@
     # headers:
     #   Cookie: "{{ fact_mdso_cookie }}"
     #   Authorization: "Bearer {{ fact_mdso_token }}"
-  until: result.failed is defined
+  until: ('status' in result) and (result.status == 404)
   retries: 120
   delay: 1
   register: result

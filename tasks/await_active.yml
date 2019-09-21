@@ -15,11 +15,3 @@
   delay: 1
   until: result.json['orchState'] == 'active'
   failed_when: result.json['orchState'] == 'failed'
-- name: set the resourceId Fact
-  set_fact:
-    cacheable: true
-    resourceId: "{{ result.json['id'] }}"
-- name: set the resource Fact
-  set_fact:
-    cacheable: true
-    resource: "{{ result.json }}"    

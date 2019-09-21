@@ -26,10 +26,9 @@
     domain: {}
 - import_tasks: get_resourceProvider_by_domainType.yml # this sets rpId and resourceProvider var
 - import_tasks: get_domains_by_domainType.yml # this sets domains var
-- name: print WARNING
-  debug:
-    msg: "WARNING: domain already exists.  Not creating new domain"
-    verbosity: 3
+- name: check domain exists
+  fail:
+    msg: "ERROR: domain already exists.  Multiple domain creation of same type not supported"
   when: (domains | length > 0)
 - name: 'create domain'
   uri:

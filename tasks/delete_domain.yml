@@ -20,7 +20,7 @@
     # headers:
     #   Cookie: "{{ fact_mdso_cookie }}"
     #   Authorization: "Bearer {{ fact_mdso_token }}"
-  until: result.failed is defined
+  until: ('status' in result) and (result.status == 404)
   retries: 120
   delay: 5
   register: result
