@@ -1,5 +1,6 @@
 ---
 # defaults file for blueplanet-integration-tests
-BP_SERVER: http://localhost:8181
-BP_USERNAME: admin
-BP_PASSWORD: adminpw
+bp_integration_tests_server: http://localhost:8181
+bp_integration_tests_username: admin
+bp_integration_tests_password: adminpw
+bp_integration_tests_token: none

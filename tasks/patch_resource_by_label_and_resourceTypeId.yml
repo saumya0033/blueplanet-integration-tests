@@ -6,13 +6,15 @@
         label: "{{ label }}"
 - name: 'patch resource'
   uri:
-    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources/{{ resourceId }}'
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resources/{{ resourceId }}'
     method: PATCH
     body:
       properties: "{{ properties }}"
     body_format: json
+    validate_certs: no
     headers:
       Content-Type: application/json
+      Authorization: "Bearer {{ bp_integration_tests_token }}"
     status_code: 201
   register: result
 - import_tasks: await_active.yml

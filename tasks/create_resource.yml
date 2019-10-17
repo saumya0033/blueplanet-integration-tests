@@ -9,15 +9,17 @@
   when: label.find("-") > 0
 - name: 'create resource'
   uri:
-    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/resources'
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resources'
     method: POST
     body:
       productId: "{{ productId }}"
       label: "{{ label }}"
       properties: "{{ properties }}"
     body_format: json
+    validate_certs: no
     headers:
       Content-Type: application/json
+      Authorization: "Bearer {{ bp_integration_tests_token }}"
     status_code: 201
   register: result
 - name: set the unkeyed_resource Fact

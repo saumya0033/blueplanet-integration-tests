@@ -1,7 +1,11 @@
 - name: 'check for existing domain'
   uri:
-    url: '{{mdso.BP_SERVER}}/bpocore/market/api/v1/domains?q=domainType:urn:ciena:bp:domain:{{domainType}}'
+    url: '{{bp_integration_tests_server}}/bpocore/market/api/v1/domains?q=domainType:urn:ciena:bp:domain:{{domainType}}'
     method: GET
+    validate_certs: no
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ bp_integration_tests_token }}"
     status_code:
       - 200
   register: result

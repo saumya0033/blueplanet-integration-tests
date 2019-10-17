@@ -7,7 +7,7 @@ Write integration and automation tests for Ciena's Blue Planet orchestration pla
 ## Recommended Installation
 
 ```bash
-ansible-galaxy install --roles-path . jgroom33.blueplanet_integration_tests
+ansible-galaxy install jgroom33.blueplanet_integration_tests
 ```
 
 ## Requirements
@@ -16,11 +16,13 @@ Blue Planet
 
 ## Role Variables
 
-BP_SERVER (default http://localhost:8181)
+bp_integration_tests_server: http://localhost:8181
 
-BP_USERNAME (default admin)
+bp_integration_tests_username: admin
 
-BP_PASSWORD (default adminpw)
+bp_integration_tests_password: adminpw
+
+bp_integration_tests_password_token: none
 
 ## Dependencies
 
@@ -37,9 +39,10 @@ N/A
 ---
 - hosts: localhost
   vars:
-    mdso:
-      BP_SERVER: http://localhost:8181
+    bp_integration_tests_server: http://localhost:8181
   gather_facts: no
+  roles:  ## This performs login via always tag from login import
+  - jgroom33.blueplanet_integration_tests
   tasks:
   - import_tasks: jgroom33.blueplanet_integration_tests/tasks/validate_resource_provider.yml
     vars:
@@ -63,11 +66,15 @@ N/A
 - hosts: localhost
   vars:
     mdso:
-      BP_SERVER: http://localhost:8181
+      bp_integration_tests_server: http://localhost:8181
   gather_facts: no
+  roles:
+  - jgroom33.blueplanet_integration_tests
   tasks:
 ## ---------------- Create -----------------
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/create_domain.yml
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: create_domain
     vars:
       - domainType: bpraciscoiosxr
       - title: 'Cisco_IOS_XR_Domain_Integration_Test'
@@ -85,7 +92,12 @@ N/A
     tags:
       - create_domain
       - create
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/create_resource_by_resourceTypeId.yml
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: create_resource_by_resourceTypeId
+    tags:
+      - create_sessionProfile
+      - create
     vars:
       - resourceTypeId: bpraciscoiosxr.resourceTypes.SessionProfile
       - label: SessionProfile_{{ hostvars['host1']['label'] }}
@@ -98,19 +110,18 @@ N/A
           connection:
               netconf:
                   hostport: "{{ hostvars['host1']['netconfHostPort'] }}" # Note: This requires https://stackoverflow.com/questions/52487396 in order to be an integer
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: create_resource_by_resourceTypeId
     tags:
-      - create_sessionProfile
+      - create_networkFunction
       - create
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/create_resource_by_resourceTypeId.yml
     vars:
       - resourceTypeId: bpraciscoiosxr.resourceTypes.NetworkFunction
       - label: NetworkFunction_{{ hostvars['host1']['label'] }}
       - properties:
           sessionProfile: "{{ keyed_resources['SessionProfile_' + hostvars['host1']['label'] ] }}"
           ipAddress: "{{ hostvars['host1']['ansible_host'] }}"
-    tags:
-      - create_networkFunction
-      - create
   - import_tasks: get_named_explicit_paths.yml
     tags:
       - get_named_explicit_paths
@@ -119,7 +130,12 @@ N/A
     tags:
       - get_tunnels
       - create
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/create_resource_by_resourceTypeId.yml
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: create_resource_by_resourceTypeId
+    tags:
+      - create_namedExplicitPath
+      - create
     vars:
       - resourceTypeId: bpraciscoiosxr.resourceTypes.NamedExplicitPath
       - label: "ansible_path_1"
@@ -153,11 +169,13 @@ N/A
                   }
               ]
           }
-    tags:
-      - create_namedExplicitPath
-      - create
 ## ---------------- Patch -----------------
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/patch_resource.yml
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: patch_resource
+    tags:
+      - patch_namedExplicitPath
+      - patch
     vars:
       - resourceId: "{{ keyed_resources['ansible_path_1'] }}"
       - properties: {
@@ -185,38 +203,43 @@ N/A
             }
           ]
         }
-    tags:
-      - patch_namedExplicitPath
-      - patch
 ## ---------------- Delete -----------------
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/delete_resource.yml
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: delete_resource
+    tags:
+      - delete_namedExplicitPath
+      - delete
     vars:
     - resourceId: "{{ keyed_resources['ansible_path_1'] }}"
-    tags:
-      - delete
-      - delete_namedExplicitPath
   - debug:
       msg: resourceId={{ keyed_resources['NetworkFunction_' + hostvars['host1']['label'] ] }}
     tags:
       - delete
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/delete_resource.yml
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: delete_resource
+    tags:
+      - delete_networkFunction
+      - delete
     vars:
     - resourceId: "{{ keyed_resources['NetworkFunction_' + hostvars['host1']['label'] ] }}"
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: delete_resource
     tags:
+      - delete_sessionProfile
       - delete
-      - delete_networkFunction
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/delete_resource.yml
     vars:
     - resourceId: "{{ keyed_resources['SessionProfile_' + hostvars['host1']['label'] ] }}"
+  - import_role:
+      name: jgroom33.blueplanet_integration_tests
+      tasks_from: delete_domain
     tags:
+      - delete_domain
       - delete
-      - delete_sessionProfile
-  - import_tasks: jgroom33.blueplanet_integration_tests/tasks/delete_domain.yml
     vars:
       - domainId: "{{ keyed_domains['Cisco_IOS_XR_Domain_Integration_Test'] }}"
-    tags:
-      - delete
-      - delete_domain
 ```
 
 ```yaml

@@ -1,0 +1,31 @@
+- name: Print login result
+  debug:
+    var: bp_integration_tests_username
+- name: Print login result
+  debug:
+    var: bp_integration_tests_password
+- name: Login
+  uri:
+    url: '{{ bp_integration_tests_server }}/tron/api/v1/tokens'
+    method: POST
+    validate_certs: no
+    body: 
+      authType: password
+      password: "{{ bp_integration_tests_password }}"
+      tenant: master
+      tenant_context: master
+      username: "{{ bp_integration_tests_username }}"
+    body_format: json
+    status_code:
+    - 405
+    - 201
+  register: result
+  # when: 
+- name: Print login result
+  debug:
+    var: result
+- name: Set the token Fact
+  set_fact:
+    cacheable: true
+    bp_integration_tests_token: "{{ result.json.token }}"
+  when: result.json is defined

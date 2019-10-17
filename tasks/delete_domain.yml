@@ -1,7 +1,11 @@
 - name: 'delete domain'
   uri:
-    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/domains/{{ domainId }}'
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains/{{ domainId }}'
     method: DELETE
+    validate_certs: no
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ bp_integration_tests_token }}"
     status_code:
       - 200
       - 201
@@ -11,15 +15,15 @@
   register: result
 - name: Verify delete domain
   uri:
-    url: '{{ mdso.BP_SERVER }}/bpocore/market/api/v1/domains/{{ domainId }}'
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains/{{ domainId }}'
     method: GET
+    validate_certs: no
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ bp_integration_tests_token }}"
     status_code:
       - 200
       - 404
-    validate_certs: no
-    # headers:
-    #   Cookie: "{{ fact_mdso_cookie }}"
-    #   Authorization: "Bearer {{ fact_mdso_token }}"
   until: ('status' in result) and (result.status == 404)
   retries: 120
   delay: 5
