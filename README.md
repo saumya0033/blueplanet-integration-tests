@@ -2,6 +2,8 @@
 
 Write integration and automation tests for Ciena's Blue Planet orchestration platform
 
+[Ansible Galaxy](https://galaxy.ansible.com/jgroom33/blueplanet_integration_tests)
+
 ## Recommended Installation
 
 ```bash
