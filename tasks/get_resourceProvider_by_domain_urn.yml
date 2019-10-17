@@ -2,13 +2,13 @@
   block:
   - name: 'get resource-providers'
     uri:
-      url: '{{mdso.BP_SERVER}}/bpocore/market/api/v1/resource-providers?q=domainType:urn:ciena:bp:domain:{{domainType}}'
+      url: '{{mdso.BP_SERVER}}/bpocore/market/api/v1/resource-providers?q=domainType:{{ urn }}'
       method: GET
     register: result
     failed_when: (result.json['items'] | length) == 0
   rescue:
     - fail:
-        msg: Resource Provider does not exist.  The RA is probably not onboarded.
+        msg: Resource Provider {{ urn }} does not exist.  The RA is probably not onboarded.
 - name: Set the RP Fact
   set_fact:
     cacheable: true

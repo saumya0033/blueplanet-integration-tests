@@ -1,0 +1,4 @@
+- include_tasks: get_resourceProvider_by_domain_urn.yml
+  with_items: "{{ validate_domain_urns }}"
+  loop_control:
+    loop_var: urn

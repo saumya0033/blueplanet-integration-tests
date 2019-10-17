@@ -1,0 +1,13 @@
+- name: Get ResourceType {{ resourceType }}
+  uri:
+    url: '{{mdso.BP_SERVER}}/bpocore/market/api/v1/resource-types/{{ resourceType }}'
+    method: GET
+  register: result
+- name: Set the resourceType Fact
+  set_fact:
+    cacheable: true
+    resourceType: "{{ result.json }}"
+- name: print resourceType
+  debug:
+    msg: "resourceType: {{ resourceType }}"
+    verbosity: 3

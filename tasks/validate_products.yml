@@ -1,0 +1,4 @@
+- include_tasks: get_products_by_resourceType.yml
+  with_items: "{{ validate_products }}"
+  loop_control:
+    loop_var: resourceType
