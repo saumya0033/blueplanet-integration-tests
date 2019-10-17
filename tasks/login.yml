@@ -9,7 +9,7 @@
     url: '{{ bp_integration_tests_server }}/tron/api/v1/tokens'
     method: POST
     validate_certs: no
-    body: 
+    body:
       authType: password
       password: "{{ bp_integration_tests_password }}"
       tenant: master

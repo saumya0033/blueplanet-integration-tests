@@ -1,6 +1,6 @@
 - name: 'get resources'
   uri:
-    url: '{{bp_integration_tests_server}}/bpocore/market/api/v1/resources?resourceTypeId={{ resourceTypeId }}&q=discovered:false'
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resources?resourceTypeId={{ resourceTypeId }}&q=discovered:false'
     method: GET
     validate_certs: no
     headers:
