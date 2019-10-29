@@ -1,4 +1,4 @@
-- name:
+- name: set the query
   set_fact:
     cacheable: false
     query: "{{ lookup('template', './templates/get_resource_by_filters.j2') }}"

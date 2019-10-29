@@ -19,16 +19,16 @@
     that: (bp_domains | length = 0)
     fail_msg: "ERROR: domain already exists.  Multiple domain creation requires bp_integration_tests_multi_domain=true"
     success_msg: undefined
-  when: (bp_integration_tests_multi_domain == false)
+  when: ! bp_integration_tests_multi_domain
 - name: 'create domain'
   uri:
     url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains'
     method: POST
     body:
       title: "{{ title }}"
-      description: "{{ description | default(title, true)}}"
-      accessUrl: '{{ accessUrl | default("127.0.0.1", true)}}'
-      address: "{{ address | default({}, true)}}"
+      description: "{{ description | default(title, true) }}"
+      accessUrl: '{{ accessUrl | default("127.0.0.1", true) }}'
+      address: "{{ address | default({}, true) }}"
       properties: "{{ properties | default({}, true) }}"
       rpId: '{{ bp_resourceProvider_id }}'
     body_format: json
@@ -51,7 +51,7 @@
     cacheable: false
     unkeyed_domain:
     - key: "{{ title }}"
-      value: "{{ result.json['id'] }}"  
+      value: "{{ result.json['id'] }}"
 - name: set the bp_domain_id Fact
   set_fact:
     cacheable: false

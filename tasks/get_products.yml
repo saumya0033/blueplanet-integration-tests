@@ -33,5 +33,6 @@
   - name: set individual domain products
     set_fact:
       cacheable: true
-      bp_keyed_products_by_domain: "{{ bp_keyed_products_by_domain | combine({item.key: bp_products | selectattr('domainId', 'equalto', item.value) | list | items2dict(key_name='resourceTypeId', value_name='id')}) }}"
+      bp_keyed_products_by_domain: "{{ bp_keyed_products_by_domain | combine({item.key: bp_products |
+        selectattr('domainId', 'equalto', item.value) | list | items2dict(key_name='resourceTypeId', value_name='id')}) }}"
     loop: "{{ bp_keyed_domains | dict2items }}"
