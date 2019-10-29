@@ -1,0 +1,20 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+  roles:
+    - { role: ../jgroom33.blueplanet_integration_tests }
+  tasks:
+  # Simple create/delete
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: create_resource
+    vars:
+      - productId: "{{ bp_keyed_products_by_domain['workflowmanager_2']['tosca.resourceTypes.NumberPool']}}"
+      - label: create_resource_with_productId
+      - properties:
+          highest: 50
+          lowest: 1

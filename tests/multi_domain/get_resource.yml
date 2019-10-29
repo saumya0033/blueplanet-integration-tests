@@ -1,0 +1,47 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+  roles:
+    - { role: ../jgroom33.blueplanet_integration_tests }
+  tasks:
+  - include_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: get_resources_by_filters
+    vars:
+      - resourceTypeId: tosca.resourceTypes.NumberPool
+  - name: Found 1 resource
+    assert:
+      that:
+        - resources | length == 1
+      fail_msg: "did not Found 1 resource"
+      success_msg: "Found 1 resource"      
+  - include_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: get_resources_by_filters
+    vars:
+      - resourceTypeId: tosca.resourceTypes.NumberPool
+      - q_params:
+          productId: "{{ bp_keyed_products_by_domain['workflowmanager_2']['tosca.resourceTypes.NumberPool']}}"
+  - name: Found 1 resource
+    assert:
+      that:
+        - resources | length == 1
+      fail_msg: "did not Found 1 resource"
+      success_msg: "Found 1 resource"
+  - include_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: get_resources_by_filters
+    vars:
+      - resourceTypeId: tosca.resourceTypes.NumberPool
+      - q_params:
+          productId: "{{ bp_keyed_products_by_domain['Planet Orchestrate']['tosca.resourceTypes.NumberPool']}}"
+  - name: Found 0 resource
+    assert:
+      that:
+        - resources | length == 0
+      fail_msg: "did not Found 0 resource"
+      success_msg: "Found 0 resource"

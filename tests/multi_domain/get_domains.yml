@@ -9,25 +9,13 @@
   roles:
     - role: ../jgroom33.blueplanet_integration_tests
   tasks:
-# Create/Delete Domain
-  - import_role:
-      name: ../jgroom33.blueplanet_integration_tests
-      tasks_from: create_domain
-    vars:
-      - domainType: "WorkflowManager"
-      - title: workflowmanager_2
   - import_role:
       name: ../jgroom33.blueplanet_integration_tests
       tasks_from: get_domains
   - name: built-in domain and new domain exist
     assert:
-      that: 
+      that:
       - bp_keyed_domains['Planet Orchestrate'] == 'built-in'
       - bp_keyed_domains['workflowmanager_2'] is defined
       fail_msg: Planet Orchestrate or workflowmanager_2 does not exist
       success_msg: Planet Orchestrate and workflowmanager_2 exist
-  - import_role:
-      name: ../jgroom33.blueplanet_integration_tests
-      tasks_from: delete_domain
-    vars:
-      - bp_domain_id: "{{ bp_keyed_domains['workflowmanager_2'] }}"

@@ -8,14 +8,30 @@
       Authorization: "Bearer {{ bp_integration_tests_token }}"
   register: result
 - name: Set bp_keyed_products fact
-  set_fact:
-    cacheable: false
-    tmp: "{{ result.json['items'] }}"
-- name: Set bp_keyed_products fact
+  block:
+  - name: Set bp_keyed_products fact
+    set_fact:
+      cacheable: false
+      tmp: "{{ result.json['items'] }}"
+  - name: Set bp_keyed_products fact
+    set_fact:
+      cacheable: true
+      bp_keyed_products: "{{ tmp | items2dict(key_name='resourceTypeId', value_name='id') }}"
+  - name: print bp_keyed_products
+    debug:
+      msg: "bp_keyed_products: {{ bp_keyed_products }}"
+      verbosity: 3
+- name: Set bp_products fact
   set_fact:
     cacheable: true
-    bp_keyed_products: "{{ tmp | items2dict(key_name='resourceTypeId', value_name='id') }}"
-- name: print bp_keyed_products
-  debug:
-    msg: "bp_keyed_products: {{ bp_keyed_products }}"
-    verbosity: 3
+    bp_products: "{{ result.json['items'] }}"
+- name: set bp_keyed_products_by_domain fact
+  when: bp_integration_tests_multi_domain
+  block:
+  - name: 'get domains'
+    import_tasks: get_domains.yml
+  - name: set individual domain products
+    set_fact:
+      cacheable: true
+      bp_keyed_products_by_domain: "{{ bp_keyed_products_by_domain | combine({item.key: bp_products | selectattr('domainId', 'equalto', item.value) | list | items2dict(key_name='resourceTypeId', value_name='id')}) }}"
+    loop: "{{ bp_keyed_domains | dict2items }}"

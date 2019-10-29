@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+  roles:
+    - role: ../jgroom33.blueplanet_integration_tests
+  tasks:
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: delete_resource
+    vars:
+    - bp_resource_id: "{{ bp_keyed_resources['create_resource_with_productId'] }}"

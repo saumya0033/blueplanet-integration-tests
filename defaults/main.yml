@@ -10,3 +10,4 @@ bp_keyed_resources: {}
 bp_keyed_resourceProviders: {}
 bp_keyed_products: {}
 bp_keyed_domains: {}
+bp_keyed_products_by_domain: {}

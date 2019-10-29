@@ -1,0 +1,23 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+    bp_integration_tests_multi_domain: true
+  roles:
+    - role: ../jgroom33.blueplanet_integration_tests
+  tasks:
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: get_products
+  - name: bp_keyed_products_by_domain created successfully
+    assert:
+      that:
+      - bp_keyed_products_by_domain['Planet Orchestrate'] is defined
+      - bp_keyed_products_by_domain['Planet Orchestrate']['tosca.resourceTypes.NumberPool'] is defined
+      - bp_keyed_products_by_domain['workflowmanager_2'] is defined
+      - bp_keyed_products_by_domain['workflowmanager_2']['tosca.resourceTypes.NumberPool'] is defined
+      fail_msg: bp_keyed_products_by_domain does NOT exist for Planet Orchestrate and workflowmanager_2
+      success_msg: bp_keyed_products_by_domain exist for Planet Orchestrate and workflowmanager_2

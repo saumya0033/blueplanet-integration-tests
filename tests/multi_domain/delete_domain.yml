@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+    bp_integration_tests_multi_domain: true
+  roles:
+    - role: ../jgroom33.blueplanet_integration_tests
+  tasks:
+# Delete Domain
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: delete_domain
+    vars:
+      - bp_domain_id: "{{ bp_keyed_domains['workflowmanager_2'] }}"
