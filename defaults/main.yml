@@ -4,6 +4,7 @@ bp_integration_tests_server: http://localhost:8181
 bp_integration_tests_username: admin
 bp_integration_tests_password: adminpw
 bp_integration_tests_token: none
+bp_integration_tests_multi_domain: false
 # Sets defaults
 bp_keyed_resources: {}
 bp_keyed_resourceProviders: {}

@@ -1,15 +1,3 @@
-# This creates a domain based on domainType specification if the domain does not yet exist
-# input:
-#   domainType (this is converted to rpId)
-#   title
-#   description
-#   accessUrl
-#   address
-#   properties
-# Returns:
-#   bp_domain_id
-#   domain
-# - import_tasks: open_cache.yml # loads cache
 - name: validate title has no spaces
   fail:
     msg: "Domain title must not contain spaces"
@@ -23,13 +11,15 @@
     bp_domain_id: ""
 - name: Clear the domain Fact
   set_fact:
-    domain: {}
-- import_tasks: get_resourceProvider_by_domainType.yml # this sets rpId and resourceProvider var
-- import_tasks: get_domains_by_domainType.yml # this sets bp_domains var
+    bp_domain: {}
+- import_tasks: get_resourceProvider_by_domainType.yml
+- import_tasks: get_domains_by_domainType.yml
 - name: check domain exists
-  fail:
-    msg: "ERROR: domain already exists.  Multiple domain creation of same type not supported"
-  when: (domains | length > 0)
+  assert:
+    that: (bp_domains | length = 0)
+    fail_msg: "ERROR: domain already exists.  Multiple domain creation requires bp_integration_tests_multi_domain=true"
+    success_msg: undefined
+  when: (bp_integration_tests_multi_domain == false)
 - name: 'create domain'
   uri:
     url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains'
@@ -52,7 +42,6 @@
       - 202
       - 204
   register: result
-  when: (domains | length == 0)
 - name: set the bp_domain_id Fact
   set_fact:
     cacheable: true

@@ -1,0 +1,35 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+    bp_integration_tests_multi_domain: true
+  roles:
+    - role: ../jgroom33.blueplanet_integration_tests
+  tasks:
+# Create/Delete Domain
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: create_domain
+    vars:
+      - domainType: "WorkflowManager"
+      - title: workflowmanager_2
+      - description: workflowmanager_2
+      - accessUrl: 'http://localhost:9192'
+      - address:
+          country: Canada
+          state: ""
+          zip: ""
+          street: ""
+          longitude: -85.706546
+          latitude: 38.344877
+          city: Vancouver
+      - properties: {}
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: delete_domain
+    vars:
+      - bp_domain_id: "{{ bp_keyed_domains['workflowmanager_2'] }}"
+
