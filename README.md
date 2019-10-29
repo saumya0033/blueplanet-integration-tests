@@ -46,7 +46,7 @@ N/A
   tasks:
   - import_tasks: jgroom33.blueplanet_integration_tests/tasks/validate_resource_provider.yml
     vars:
-      validate_domain_urns:
+      validate_domainTypes:
       - urn:ciena:bp:domain:bpraciscoiosxr
   - import_tasks: jgroom33.blueplanet_integration_tests/tasks/validate_resourceTypes.yml
     vars:
@@ -120,7 +120,7 @@ N/A
       - resourceTypeId: bpraciscoiosxr.resourceTypes.NetworkFunction
       - label: NetworkFunction_{{ hostvars['host1']['label'] }}
       - properties:
-          sessionProfile: "{{ keyed_resources['SessionProfile_' + hostvars['host1']['label'] ] }}"
+          sessionProfile: "{{ bp_keyed_resources['SessionProfile_' + hostvars['host1']['label'] ] }}"
           ipAddress: "{{ hostvars['host1']['ansible_host'] }}"
   - import_tasks: get_named_explicit_paths.yml
     tags:
@@ -141,7 +141,7 @@ N/A
       - label: "ansible_path_1"
       - properties:
           {
-              "device": "{{ keyed_resources['NetworkFunction_' + hostvars['host1']['label'] ] }}",
+              "device": "{{ bp_keyed_resources['NetworkFunction_' + hostvars['host1']['label'] ] }}",
               "config": {
               "name": "ansible_path_1"
               },
@@ -177,7 +177,7 @@ N/A
       - patch_namedExplicitPath
       - patch
     vars:
-      - resourceId: "{{ keyed_resources['ansible_path_1'] }}"
+      - bp_resource_id: "{{ bp_keyed_resources['ansible_path_1'] }}"
       - properties: {
           "explicitRouteObjects": [
             {
@@ -211,9 +211,9 @@ N/A
       - delete_namedExplicitPath
       - delete
     vars:
-    - resourceId: "{{ keyed_resources['ansible_path_1'] }}"
+    - bp_resource_id: "{{ bp_keyed_resources['ansible_path_1'] }}"
   - debug:
-      msg: resourceId={{ keyed_resources['NetworkFunction_' + hostvars['host1']['label'] ] }}
+      msg: bp_resource_id={{ bp_keyed_resources['NetworkFunction_' + hostvars['host1']['label'] ] }}
     tags:
       - delete
   - import_role:
@@ -223,7 +223,7 @@ N/A
       - delete_networkFunction
       - delete
     vars:
-    - resourceId: "{{ keyed_resources['NetworkFunction_' + hostvars['host1']['label'] ] }}"
+    - bp_resource_id: "{{ bp_keyed_resources['NetworkFunction_' + hostvars['host1']['label'] ] }}"
   - import_role:
       name: jgroom33.blueplanet_integration_tests
       tasks_from: delete_resource
@@ -231,7 +231,7 @@ N/A
       - delete_sessionProfile
       - delete
     vars:
-    - resourceId: "{{ keyed_resources['SessionProfile_' + hostvars['host1']['label'] ] }}"
+    - bp_resource_id: "{{ bp_keyed_resources['SessionProfile_' + hostvars['host1']['label'] ] }}"
   - import_role:
       name: jgroom33.blueplanet_integration_tests
       tasks_from: delete_domain
@@ -239,7 +239,7 @@ N/A
       - delete_domain
       - delete
     vars:
-      - domainId: "{{ keyed_domains['Cisco_IOS_XR_Domain_Integration_Test'] }}"
+      - bp_domain_id: "{{ bp_keyed_domains['Cisco_IOS_XR_Domain_Integration_Test'] }}"
 ```
 
 ```yaml
@@ -278,6 +278,7 @@ Author Information
 
 Jeff Groom (jgroom@ciena.com)
 
+
 Table render broken
 -------------------
 
@@ -285,8 +286,13 @@ Default fact storage:
 
 | Market entity |             task                |                                       input                                        |  output fact (returns this global var)   |
 | :-----------: | :-----------------------------: | :--------------------------------------------------------------------------------: | :--------------------------------------: |
-|   resource    |         create_resource         |                     resourceTypeId <br> label <br> properties                      |           resourceId_`<label>`           |
-|   resource    |   get_resource_one_by_filters   |                                                                                    | resource (Dict) <br> resourceId (String) |
-|   resource    | get_resources_by_resourceTypeId |                                   resourceTypeId                                   | resources (Dict) <br> resourceId (String) |
-|    domain     |          create_domain          | title <br> description <br> accessUrl <br> domainType <br> properties <br> address |            domainId_`<title>`            |
-|    domain     |          delete_domain          |                                      domainId                                      |                                          |
+|   resource    |         create_resource         |                     resourceTypeId <br> label <br> properties                      |    bp_keyed_resources:{`<label>`:`id`}      |
+|   resource    |   get_resource_one_by_filters   |                                                                                    | resource:(Dict) <br> bp_resource_id (String) |
+|   resource    | get_resources_by_resourceTypeId |                                   resourceTypeId                                   | resources:[(Dict)]                       |
+|   resource    | get_created_resources_by_resourceTypeId |                                   resourceTypeId                           | resources:[(Dict)]                       |
+|    domain     |          create_domain          | title <br> description <br> accessUrl <br> domainType <br> properties <br> address | keyed_domains:{`<title>`:`id`}           |
+|    domain     |          delete_domain          |                                      bp_domain_id                                      |                                          |
+|   products    |  get_products                   |                                                                                    | keyed_products:{`resourceTypeId`:`id`}   |
+|   products    |  get_products_by_resourceType   |   resourceType                                                                     | keyed_products:{`resourceTypeId`:`id`}   |
+|   products    |  get_products_by_domainType     |   urn:ciena:bp:domain:`domainType`                                                 | keyed_products:{`resourceTypeId`:`id`}   |
+|   products    |  get_products_by_resourceType   |   resourceTypeId                                                                     | keyed_products:{`resourceTypeId`:`id`}   |

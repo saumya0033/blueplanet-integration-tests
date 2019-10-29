@@ -7,11 +7,3 @@
       Content-Type: application/json
       Authorization: "Bearer {{ bp_integration_tests_token }}"
   register: result
-- name: Set the resourceType Fact
-  set_fact:
-    cacheable: true
-    resourceType: "{{ result.json }}"
-- name: print resourceType
-  debug:
-    msg: "resourceType: {{ resourceType }}"
-    verbosity: 3

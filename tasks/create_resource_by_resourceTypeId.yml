@@ -1,4 +1,4 @@
-- import_tasks: open_cache.yml # loads cache
+# - import_tasks: open_cache.yml # loads cache
 - name: validate label has no spaces
   fail:
     msg: "Resource label must not contain spaces"
@@ -7,8 +7,11 @@
   fail:
     msg: "label must not contain dashes"
   when: label.find("-") > 0
-- import_tasks: get_products.yml # this sets products and keyed_products var
+- import_tasks: get_products.yml # this sets products and bp_keyed_products var
+- name: print
+  debug:
+    var: bp_keyed_products
 - name: 'create resource'
   import_tasks: create_resource.yml
   vars:
-      productId: "{{ keyed_products[resourceTypeId] }}"
+    productId: "{{ bp_keyed_products[resourceTypeId] }}"

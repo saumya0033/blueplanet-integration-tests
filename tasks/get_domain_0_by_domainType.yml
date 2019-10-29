@@ -1,6 +1,6 @@
 - name: 'get domain'
   uri:
-    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains?q=domainType:urn:ciena:bp:domain:{{ domainType }}'
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains?q=domainType:{{ domainType }}'
     method: GET
     validate_certs: no
     headers:
@@ -8,14 +8,14 @@
       Authorization: "Bearer {{ bp_integration_tests_token }}"
     status_code:
       - 200
-  register: domain
-- name: Set the domainID Fact
+  register: result
+- name: Set the bp_domain_id Fact
   set_fact:
     cacheable: true
-    domainId: "{{ domain.json['items'][0]['id'] }}"
-  when: (domain.json['items'] | length) > 0
-- name: Set the domain Fact
+    bp_domain_id: "{{ result.json['items'][0]['id'] }}"
+  when: (result.json['items'] | length) > 0
+- name: Set the bp_domain Fact
   set_fact:
     cacheable: true
-    domain: "{{ domain.json['items'][0] }}"
-  when: (domain.json['items'] | length) > 0
+    bp_domain: "{{ result.json['items'][0] }}"
+  when: (result.json['items'] | length) > 0

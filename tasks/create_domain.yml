@@ -7,9 +7,9 @@
 #   address
 #   properties
 # Returns:
-#   domainId
+#   bp_domain_id
 #   domain
-- import_tasks: open_cache.yml # loads cache
+# - import_tasks: open_cache.yml # loads cache
 - name: validate title has no spaces
   fail:
     msg: "Domain title must not contain spaces"
@@ -18,14 +18,14 @@
   fail:
     msg: "Domain title must not contain dashes"
   when: title.find("-") > 0
-- name: Clear the domainID Fact
+- name: Clear the bp_domain_id Fact
   set_fact:
-    domainId: ""
+    bp_domain_id: ""
 - name: Clear the domain Fact
   set_fact:
     domain: {}
 - import_tasks: get_resourceProvider_by_domainType.yml # this sets rpId and resourceProvider var
-- import_tasks: get_domains_by_domainType.yml # this sets domains var
+- import_tasks: get_domains_by_domainType.yml # this sets bp_domains var
 - name: check domain exists
   fail:
     msg: "ERROR: domain already exists.  Multiple domain creation of same type not supported"
@@ -40,7 +40,7 @@
       accessUrl: '{{ accessUrl }}'
       address: "{{ address }}"
       properties: "{{ properties }}"
-      rpId: '{{ rpId }}'
+      rpId: '{{ bp_resourceProvider_id }}'
     body_format: json
     validate_certs: no
     headers:
@@ -53,20 +53,17 @@
       - 204
   register: result
   when: (domains | length == 0)
-- name: set the domainId Fact
+- name: set the bp_domain_id Fact
   set_fact:
     cacheable: true
-    domainId: "{{ result.json['id'] }}"
-- name: set the unkeyed_domain Fact
-  set_fact:
+    bp_domain_id: "{{ result.json['id'] }}"
+- name: Update the bp_keyed_domains Fact
+  vars:
     unkeyed_domain:
     - key: "{{ title }}"
-      value: "{{ result.json['id'] }}"
-- name: set the keyed_domain Fact
+      value: "{{ result.json['id'] }}"  
+    tmp: "{{ unkeyed_domain | items2dict(key_name='key', value_name='value') }}"
   set_fact:
-    keyed_domain: "{{ unkeyed_domain | items2dict(key_name='key', value_name='value') }}"
-- name: Update the keyed_domains Fact
-  set_fact:
-    keyed_domains: "{{ keyed_domains | combine(keyed_domain) }}"
+    bp_keyed_domains: "{{ bp_keyed_domains | combine(tmp) }}"
     cacheable: true
 - import_tasks: await_domain_onboard.yml

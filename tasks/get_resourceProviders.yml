@@ -2,7 +2,7 @@
   block:
   - name: 'get resource-providers'
     uri:
-      url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resource-providers?q=domainType:{{ domainType }}'
+      url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resource-providers'
       method: GET
       validate_certs: no
       headers:
@@ -12,19 +12,10 @@
   rescue:
   - name: Fail when Resource Provider not found
     fail:
-      msg: Resource Provider does not exist.  The RA is probably not onboarded.
-- name: Set the resourceProviders Fact
-  set_fact:
-    tmp: "{{ result.json['items'] }}"
-- name: Set the resourceProviders Fact
-  set_fact:
-    cacheable: true
-    bp_resourceProvider_id: "{{ result.json['items'][0]['id'] }}"
-- name: print resourceProviders
-  debug:
-    msg: "resourceProviders: {{ tmp }}"
-    verbosity: 3
+      msg: No Resource Providers exist.
 - name: Set bp_keyed_resourceProviders fact
+  vars:
+    tmp: "{{ result.json['items'] }}"
   set_fact:
     cacheable: true
     bp_keyed_resourceProviders: "{{ tmp | items2dict(key_name='domainType', value_name='id') }}"

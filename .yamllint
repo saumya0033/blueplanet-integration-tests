@@ -1,0 +1,3 @@
+# Ignore virtualenv lib/ inside directory
+ignore: |
+  **/env/

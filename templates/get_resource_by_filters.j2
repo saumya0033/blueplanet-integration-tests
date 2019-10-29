@@ -1,11 +1,19 @@
-?{% if resourceTypeId is defined %}resourceTypeId={{ resourceTypeId }}{% endif %}
-{% if resourceTypeId is defined and q_params is defined %}&{% endif %}
-{% if q_params is defined %}q=
-{%- for key, value in q_params.iteritems() -%}
-{{ key }}:{{ value | urlencode }}{%- if not loop.last %},{% endif %}
-{%- endfor -%}{% endif %}
-{% if resourceTypeId is defined or q_params is defined %}&{% endif %}
-{% if p_params is defined %}p=
-{%- for key, value in p_params.iteritems() -%}
-{{ key }}:{{ value | urlencode }}{%- if not loop.last %},{% endif %}
-{%- endfor -%}{% endif %}
+{%- set queries = [] -%}
+{%- set q_params_array = [] -%}
+{%- set p_params_array = [] -%}
+{%- if resourceTypeId is defined -%}
+    {%- set _ = queries.append('resourceTypeId=' + resourceTypeId) -%}
+{%- endif -%}
+{% if q_params is defined %}
+    {%- for key, value in q_params.items() -%}
+        {%- set _ = q_params_array.append(key + ':' + value | urlencode) -%}
+    {%- endfor -%}
+    {%- set _ = queries.append('q=' + q_params_array | join(',')) -%}
+{%- endif -%}
+{% if p_params is defined %}
+    {%- for key, value in p_params.items() -%}
+        {%- set _ = p_params_array.append(key + ':' + value | urlencode) -%}
+    {%- endfor -%}
+    {%- set _ = queries.append('p=' + p_params_array | join(',')) -%}
+{%- endif -%}
+?{{ queries | join('&') }}

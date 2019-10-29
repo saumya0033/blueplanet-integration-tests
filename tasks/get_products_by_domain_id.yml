@@ -1,17 +1,17 @@
 - name: 'get products'
   uri:
-    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/products?includeInactive=true'
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains/{{ bp_domain_id }}/products?includeInactive=true'
     method: GET
     validate_certs: no
     headers:
       Content-Type: application/json
       Authorization: "Bearer {{ bp_integration_tests_token }}"
   register: result
-- name: Set bp_keyed_products fact
+- name: Set individual facts
   set_fact:
-    cacheable: false
     tmp: "{{ result.json['items'] }}"
-- name: Set bp_keyed_products fact
+    cacheable: false
+- name: Set individual facts
   set_fact:
     cacheable: true
     bp_keyed_products: "{{ tmp | items2dict(key_name='resourceTypeId', value_name='id') }}"

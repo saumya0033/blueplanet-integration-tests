@@ -1,9 +1,3 @@
-- name: Print login result
-  debug:
-    var: bp_integration_tests_username
-- name: Print login result
-  debug:
-    var: bp_integration_tests_password
 - name: Login
   uri:
     url: '{{ bp_integration_tests_server }}/tron/api/v1/tokens'
@@ -20,10 +14,11 @@
     - 405
     - 201
   register: result
-  # when: 
+  when: bp_integration_tests_server.find('https') > 0
 - name: Print login result
   debug:
     var: result
+    verbosity: 3
 - name: Set the token Fact
   set_fact:
     cacheable: true

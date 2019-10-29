@@ -9,11 +9,11 @@
     status_code:
       - 200
   register: result
-- name: Set the domains Fact
+- name: Set the bp_domains Fact
   set_fact:
     cacheable: true
-    domains: "{{ result.json['items'] }}"
-- name: print domains
+    bp_domains: "{{ result.json['items'] }}"
+- name: print bp_domains
   debug:
-    msg: "domains: {{ domains }}"
+    msg: "domains: {{ bp_domains }}"
     verbosity: 3

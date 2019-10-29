@@ -1,4 +1,4 @@
 - include_tasks: get_resourceType.yml
-  with_items: "{{ validate_resourceTypes }}"
+  with_items: "{{ bp_resourceTypes_validate }}"
   loop_control:
     loop_var: resourceType

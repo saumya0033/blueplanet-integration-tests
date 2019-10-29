@@ -1,3 +1,4 @@
+# No longer in use
 - name: check ANSIBLE_JINJA2_NATIVE
   fail:
     msg: env var ANSIBLE_JINJA2_NATIVE not set to true

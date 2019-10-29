@@ -1,0 +1,19 @@
+- name: 'get resources by filters'
+  import_tasks: get_resources_by_filters.yml
+- name: 'patch resource discovered'
+  uri:
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resources/{{ item.id }}'
+    method: PATCH
+    body:
+      discovered: "{{ discovered }}"
+    body_format: json
+    validate_certs: no
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ bp_integration_tests_token }}"
+    status_code:
+    - 200
+    - 201
+  register: result
+  loop: "{{ resources }}"
+- import_tasks: await_active_by_resourceTypeId.yml

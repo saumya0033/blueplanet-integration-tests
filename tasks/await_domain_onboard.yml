@@ -1,4 +1,4 @@
-- import_tasks: get_products_by_domainId.yml
+- import_tasks: get_products_by_domain_id.yml
   until: (resourceProvider.resourceTypes | length) == (products | length)
   retries: 5
   delay: 10

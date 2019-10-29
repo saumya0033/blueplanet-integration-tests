@@ -1,4 +1,0 @@
-- name: 'get resource by cacheProperty'
-  import_tasks: get_resourceId_by_cacheProperty.yml
-- name: 'patch resource'
-  import_tasks: patch_resource.yml

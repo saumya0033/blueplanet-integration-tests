@@ -3,7 +3,7 @@
     url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resources/{{ bp_resource_id }}'
     method: PATCH
     body:
-      properties: "{{ properties }}"
+      discovered: "{{ discovered }}"
     validate_certs: no
     headers:
       Content-Type: application/json

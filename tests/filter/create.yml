@@ -1,0 +1,30 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    # bp_integration_tests_server: https://10.182.18.132
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+  roles:
+    - { role: ../jgroom33.blueplanet_integration_tests }
+  tasks:
+  # create 2 resource. resourceTypeId
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: create_resource_by_resourceTypeId
+    vars:
+      - resourceTypeId: tosca.resourceTypes.NumberPool
+      - label: create_resource_by_resourceTypeId_test_2
+      - properties:
+          highest: 100
+          lowest: 1
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: create_resource_by_resourceTypeId
+    vars:
+      - resourceTypeId: tosca.resourceTypes.NumberPool
+      - label: create_resource_by_resourceTypeId_test_1
+      - properties:
+          highest: 100
+          lowest: 1

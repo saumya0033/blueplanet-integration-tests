@@ -6,7 +6,7 @@
         label: "{{ label }}"
 - name: 'patch resource'
   uri:
-    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resources/{{ resourceId }}'
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resources/{{ bp_resource_id }}'
     method: PATCH
     body:
       properties: "{{ properties }}"

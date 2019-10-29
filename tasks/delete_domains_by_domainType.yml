@@ -1,5 +1,5 @@
-- import_tasks: get_domains_by_domainType.yml # this sets domains var
-- name: Delete domains
+- import_tasks: get_domains_by_domainType.yml
+- name: Delete bp_domains
   uri:
     url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains/{{ item.id }}'
     method: DELETE
@@ -9,4 +9,4 @@
     headers:
       Content-Type: application/json
       Authorization: "Bearer {{ bp_integration_tests_token }}"
-  with_items: "{{ domains }}"
+  with_items: "{{ bp_domains }}"
