@@ -26,10 +26,10 @@
     method: POST
     body:
       title: "{{ title }}"
-      description: "{{ description }}"
-      accessUrl: '{{ accessUrl }}'
-      address: "{{ address }}"
-      properties: "{{ properties }}"
+      description: "{{ description | default(title, true)}}"
+      accessUrl: '{{ accessUrl | default("127.0.0.1", true)}}'
+      address: "{{ address | default({}, true)}}"
+      properties: "{{ properties | default({}, true) }}"
       rpId: '{{ bp_resourceProvider_id }}'
     body_format: json
     validate_certs: no
@@ -46,12 +46,17 @@
   set_fact:
     cacheable: true
     bp_domain_id: "{{ result.json['id'] }}"
-- name: Update the bp_keyed_domains Fact
-  vars:
+- name: set the bp_domain_id Fact
+  set_fact:
+    cacheable: false
     unkeyed_domain:
     - key: "{{ title }}"
       value: "{{ result.json['id'] }}"  
+- name: set the bp_domain_id Fact
+  set_fact:
+    cacheable: false
     tmp: "{{ unkeyed_domain | items2dict(key_name='key', value_name='value') }}"
+- name: Update the bp_keyed_domains Fact
   set_fact:
     bp_keyed_domains: "{{ bp_keyed_domains | combine(tmp) }}"
     cacheable: true

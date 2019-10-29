@@ -33,4 +33,3 @@
       tasks_from: delete_domain
     vars:
       - bp_domain_id: "{{ bp_keyed_domains['Cisco_IOS_XR_Domain_Integration_Test'] }}"
-

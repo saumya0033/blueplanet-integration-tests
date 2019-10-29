@@ -16,20 +16,18 @@
     vars:
       - domainType: "WorkflowManager"
       - title: workflowmanager_2
-      - description: workflowmanager_2
-      - accessUrl: 'http://localhost:9192'
-      - address:
-          country: Canada
-          state: ""
-          zip: ""
-          street: ""
-          longitude: -85.706546
-          latitude: 38.344877
-          city: Vancouver
-      - properties: {}
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: get_domains
+  - name: built-in domain and new domain exist
+    assert:
+      that: 
+      - bp_keyed_domains['Planet Orchestrate'] == 'built-in'
+      - bp_keyed_domains['workflowmanager_2'] is defined
+      fail_msg: Planet Orchestrate or workflowmanager_2 does not exist
+      success_msg: Planet Orchestrate and workflowmanager_2 exist
   - import_role:
       name: ../jgroom33.blueplanet_integration_tests
       tasks_from: delete_domain
     vars:
       - bp_domain_id: "{{ bp_keyed_domains['workflowmanager_2'] }}"
-
