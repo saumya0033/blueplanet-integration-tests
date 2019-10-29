@@ -44,12 +44,13 @@ ansible-playbook tests/filter/create.yml
 ansible-playbook tests/filter/get.yml
 ansible-playbook tests/filter/delete.yml
 
-ansible-playbook tests/multi_domain/create_domain.yml
-ansible-playbook tests/multi_domain/get_domains.yml
-ansible-playbook tests/multi_domain/get_products.yml
-ansible-playbook tests/multi_domain/create_resource.yml
-ansible-playbook tests/multi_domain/delete_resource.yml
-ansible-playbook tests/multi_domain/delete_domain.yml
+ansible-playbook tests/multi_domain/1-create_domain.yml
+ansible-playbook tests/multi_domain/2-get_domains.yml
+ansible-playbook tests/multi_domain/3-get_products.yml
+ansible-playbook tests/multi_domain/4-create_resource.yml
+ansible-playbook tests/multi_domain/5-get_resource.yml
+ansible-playbook tests/multi_domain/6-delete_resource.yml
+ansible-playbook tests/multi_domain/7-delete_domain.yml
 ```
 
 ## License
