@@ -8,11 +8,12 @@
       headers:
         Authorization: "Bearer {{ bp_integration_tests_token }}"
     register: result
-    failed_when: (result.json['items'] | length) == 0
-  rescue:
-  - name: Fail when Resource Provider not found
-    fail:
-      msg: No Resource Providers exist.
+  - name: validate RP's
+    assert:
+        that:
+          - result.json['items'] is defined
+          - (result.json['items'] | length) > 0
+        success_msg: validate RP's
 - name: Set bp_keyed_resourceProviders fact
   vars:
     tmp: "{{ result.json['items'] }}"

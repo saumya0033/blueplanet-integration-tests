@@ -14,7 +14,7 @@
     - 405
     - 201
   register: result
-  when: bp_integration_tests_server.find('https') > 0
+  when: bp_integration_tests_server | contains('https')
 - name: Print login result
   debug:
     var: result

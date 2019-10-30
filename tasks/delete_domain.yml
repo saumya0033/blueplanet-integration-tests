@@ -1,3 +1,4 @@
+- import_tasks: get_domains.yml
 - name: 'delete domain'
   uri:
     url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/domains/{{ bp_domain_id }}'

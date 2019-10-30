@@ -16,7 +16,7 @@
 - import_tasks: get_domains_by_domainType.yml
 - name: check domain exists
   assert:
-    that: (bp_domains | length = 0)
+    that: (bp_domains | length == 0)
     fail_msg: "ERROR: domain already exists.  Multiple domain creation requires bp_integration_tests_multi_domain=true"
     success_msg: undefined
   when: ! bp_integration_tests_multi_domain
@@ -51,7 +51,7 @@
     cacheable: false
     unkeyed_domain:
     - key: "{{ title }}"
-      value: "{{ result.json['id'] }}"
+      value: "{{ result.json['id'] }}"  
 - name: set the bp_domain_id Fact
   set_fact:
     cacheable: false

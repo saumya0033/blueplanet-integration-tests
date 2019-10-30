@@ -8,11 +8,13 @@
       headers:
         Authorization: "Bearer {{ bp_integration_tests_token }}"
     register: result
-    failed_when: (result.json['items'] | length) == 0
-  rescue:
-  - name: Fail when Resource Provider not found
-    fail:
-      msg: Resource Provider does not exist.  The RA is probably not onboarded.
+  - name: validate RP's
+    assert:
+        that:
+          - result.json['items'] is defined
+          - (result.json['items'] | length) > 0
+        success_msg: validate RP's
+        fail_msg: resource provider {{ domainType }} not found
 - name: Set the resourceProviders Fact
   set_fact:
     tmp: "{{ result.json['items'] }}"
