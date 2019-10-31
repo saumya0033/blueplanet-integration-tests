@@ -51,7 +51,7 @@
     cacheable: false
     unkeyed_domain:
     - key: "{{ title }}"
-      value: "{{ result.json['id'] }}"  
+      value: "{{ result.json['id'] }}"
 - name: set the bp_domain_id Fact
   set_fact:
     cacheable: false
