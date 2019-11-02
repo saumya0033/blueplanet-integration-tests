@@ -15,5 +15,5 @@
     - 200
     - 201
   register: result
-  loop: "{{ resources }}"
+  loop: "{{ bp_resources }}"
 - import_tasks: await_active_by_resourceTypeId.yml

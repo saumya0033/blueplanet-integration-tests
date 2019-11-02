@@ -1,7 +1,7 @@
-- name: Clear the resources Fact
+- name: Clear the bp_resources Fact
   set_fact:
     cacheable: true
-    resources: []
+    bp_resources: []
 - import_tasks: get_created_resources_by_resourceTypeId.yml
 - name: Delete resource
   uri:
@@ -13,8 +13,8 @@
     headers:
       Content-Type: application/json
       Authorization: "Bearer {{ bp_integration_tests_token }}"
-  with_items: "{{ resources }}"
-- name: Verify delete resources
+  with_items: "{{ bp_resources }}"
+- name: Verify delete bp_resources
   uri:
     url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/resources/{{ item.id }}'
     method: GET
@@ -25,12 +25,12 @@
     headers:
       Content-Type: application/json
       Authorization: "Bearer {{ bp_integration_tests_token }}"
-  with_items: "{{ resources }}"
+  with_items: "{{ bp_resources }}"
   until: result.failed is defined
   retries: 120
   delay: 1
   register: result
-- name: Delete resources
+- name: Delete bp_resources
   debug:
     msg: "resources: {{ result }}"
     verbosity: 3

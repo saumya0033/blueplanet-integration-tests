@@ -78,6 +78,7 @@ The fact storage from the previous execution can be used for the delete
 
 ```bash
 ansible-playbook tests/chained/create.yml
+ansible-playbook tests/chained/get.yml
 ansible-playbook tests/chained/delete.yml
 
 ansible-playbook tests/create-delete_by_id/playbook.yml
@@ -90,7 +91,7 @@ ansible-playbook tests/filter/create.yml
 ansible-playbook tests/filter/get.yml
 ansible-playbook tests/filter/delete.yml
 
-ansible-playbook tests/hacks/playbook.yml
+# ansible-playbook tests/hacks/playbook.yml
 
 ansible-playbook tests/multi_domain/1-create_domain.yml
 ansible-playbook tests/multi_domain/2-get_domains.yml

@@ -1,0 +1,48 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    # bp_integration_tests_server: https://10.182.18.132
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+  roles:
+    - role: ../jgroom33.blueplanet_integration_tests
+  tasks:
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: get_products
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: activate_product
+    vars:
+      - bp_product_id: "{{ bp_keyed_products['tosca.resourceTypes.Noop'] }}"
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: create_resource_by_resourceTypeId
+    vars:
+      - resourceTypeId: tosca.resourceTypes.Noop
+      - label: create_noop_resource_1
+      - properties:
+          data:
+            foo: 1
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: create_resource_by_resourceTypeId
+    vars:
+      - resourceTypeId: tosca.resourceTypes.Noop
+      - label: create_noop_resource_2
+      - properties:
+          data:
+            foo: 1
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: patch_resources_discovered_by_resourceTypeId
+    vars:
+      resourceTypeId: tosca.resourceTypes.Noop
+      discovered: false
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: patch_resources_terminated_by_resourceTypeId
+    vars:
+    - resourceTypeId: tosca.resourceTypes.Noop

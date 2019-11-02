@@ -1,0 +1,17 @@
+- debug:
+    var: bp_integration_tests_token
+- name: 'patch product'
+  uri:
+    url: '{{ bp_integration_tests_server }}/bpocore/market/api/v1/products/{{ bp_product_id }}'
+    method: PATCH
+    body_format: json
+    body:
+      active: True
+    validate_certs: no
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ bp_integration_tests_token }}"
+    status_code:
+      - 200
+      - 201
+  register: result

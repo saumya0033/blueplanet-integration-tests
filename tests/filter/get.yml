@@ -18,7 +18,7 @@
   - name: Found 2 resource
     assert:
       that:
-        - resources | length == 2
+        - bp_resources | length == 2
       fail_msg: "did not Found 2 resource"
       success_msg: "Found 2 resource"      
   - include_role:
@@ -31,6 +31,6 @@
   - name: Found 1 resource
     assert:
       that:
-        - resources | length == 1
+        - bp_resources | length == 1
       fail_msg: "did not Found 1 resource"
       success_msg: "Found 1 resource"

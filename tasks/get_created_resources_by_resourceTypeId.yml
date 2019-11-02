@@ -7,11 +7,11 @@
       Content-Type: application/json
       Authorization: "Bearer {{ bp_integration_tests_token }}"
   register: result
-- name: Set the resources Fact
+- name: Set the bp_resources Fact
   set_fact:
     cacheable: true
-    resources: "{{ result.json['items'] }}"
-- name: print resources
+    bp_resources: "{{ result.json['items'] }}"
+- name: print bp_resources
   debug:
-    msg: "resources: {{ resources }}"
+    msg: "bp_resources: {{ bp_resources }}"
     verbosity: 3

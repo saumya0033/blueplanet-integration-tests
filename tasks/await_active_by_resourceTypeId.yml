@@ -16,4 +16,4 @@
   retries: 60
   delay: 5
   until: result.json['orchState'] == 'active'
-  loop: "{{ resources }}"
+  loop: "{{ bp_resources }}"
