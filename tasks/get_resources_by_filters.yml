@@ -19,9 +19,24 @@
   register: result
 - name: Set the resources Fact
   set_fact:
-    cacheable: true
+    cacheable: false
     resources: "{{ result.json['items'] }}"
 - name: print resources
   debug:
     msg: "resources: {{ resources }}"
     verbosity: 3
+
+# - name: Set bp_keyed_resources fact
+#   block:
+#   - name: Set bp_keyed_resources fact
+#     set_fact:
+#       cacheable: false
+#       tmp: "{{ result.json['items'] }}"
+#   - name: Set bp_keyed_resources fact
+#     set_fact:
+#       cacheable: true
+#       bp_keyed_products: "{{ tmp | items2dict(key_name='resourceTypeId', value_name='id') }}"
+#   - name: print bp_keyed_products
+#     debug:
+#       msg: "bp_keyed_products: {{ bp_keyed_products }}"
+#       verbosity: 3

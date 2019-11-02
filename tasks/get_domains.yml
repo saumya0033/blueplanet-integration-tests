@@ -11,11 +11,11 @@
   register: result
 - name: Set the bp_domains Fact
   set_fact:
-    cacheable: false
+    cacheable: true
     bp_domains: "{{ result.json['items'] }}"
 - name: print bp_domains
   debug:
-    msg: "domains: {{ bp_domains }}"
+    msg: "bp_domains: {{ bp_domains }}"
     verbosity: 3
 - name: Set individual facts
   set_fact:

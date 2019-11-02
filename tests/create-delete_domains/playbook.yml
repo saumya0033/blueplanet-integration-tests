@@ -1,0 +1,57 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    # bp_integration_tests_server: https://10.182.18.132
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+  roles:
+    - role: ../jgroom33.blueplanet_integration_tests
+  tasks:
+
+# Create Domain
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: create_domain
+    vars:
+      - domainType: "WorkflowManager"
+      - title: workflowmanager_2
+  - name: assert domain fact was set
+    assert:
+        that: bp_keyed_domains['workflowmanager_2'] is defined
+        fail_msg: domain fact was set
+        success_msg: domain fact was not set
+  # Pro tip 1: do a get_domains, then assert on the filter
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: get_domains
+  - name: assert domain fact was set
+    assert:
+        that: (bp_domains | selectattr('title', 'equalto', 'workflowmanager_2') | list | length) == 1
+        fail_msg: domain was not found
+        success_msg: domain was found
+  # Pro tip 2: do a get_domains, set your own var, then assert on that and use it later
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: get_domains
+  - name: set my custom var
+    set_fact:
+      my_var: "{{ bp_domains | selectattr('title', 'equalto', 'workflowmanager_2') | list | first }}"
+  - name: print my_var
+    debug:
+      var: my_var
+  - name: assert my_var
+    assert:
+        that:
+        - my_var.operationMode == 'normal'
+        - my_var.rpId == 'built-in'
+        - my_var.title == 'workflowmanager_2'
+        fail_msg: my_var validations failed
+        success_msg: my_var validations succeeded
+  # Delete
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: delete_domain
+    vars:
+      - bp_domain_id: "{{ bp_keyed_domains['workflowmanager_2'] }}"

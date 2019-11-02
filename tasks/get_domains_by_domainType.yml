@@ -15,5 +15,5 @@
     bp_domains: "{{ result.json['items'] }}"
 - name: print bp_domains
   debug:
-    msg: "domains: {{ bp_domains }}"
+    msg: "bp_domains: {{ bp_domains }}"
     verbosity: 3

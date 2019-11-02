@@ -1,0 +1,35 @@
+---
+- name: Converge
+  hosts: [ localhost ]
+  gather_facts: no
+  vars:
+    # bp_integration_tests_server: https://10.182.18.132
+    bp_integration_tests_username: admin
+    bp_integration_tests_password: adminpw
+  roles:
+    - role: ../jgroom33.blueplanet_integration_tests
+  tasks:
+  # Validations
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: validate_resource_provider
+    vars:
+      bp_domainTypes_validate:
+      - WorkflowManager
+      # Add more validations here
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: validate_resourceTypes
+    vars:
+      bp_resourceTypes_validate:
+      - tosca.resourceTypes.Monitor
+      - tosca.resourceTypes.NumberPool
+      # Add more validations here
+  - import_role:
+      name: ../jgroom33.blueplanet_integration_tests
+      tasks_from: validate_products
+    vars:
+      bp_products_validate:
+      - tosca.resourceTypes.Monitor
+      - tosca.resourceTypes.NumberPool
+      # Add more validations here
